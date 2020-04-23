@@ -13,22 +13,36 @@ const host = {
 
 function Address({ value }) {
   const { chain } = Ethereum.useContext();
-  let node = <Typography.Text copyable>{value}</Typography.Text>;
+  let node = value;
   if (host[chain]) {
-    return <a href={`${host[chain]}/address/${value}`}>{node}</a>;
-  } else {
-    return node;
+    node = (
+      <a href={`${host[chain]}/address/${value}`}>
+        {node}
+      </a>
+    );
   }
+  return (
+    <Typography.Text copyable={{ text: value }}>
+      {node}
+    </Typography.Text>
+  );
 }
 
 function Transaction({ value }) {
   const { chain } = Ethereum.useContext();
-  let node = <Typography.Text copyable>{value}</Typography.Text>;
+  let node = value;
   if (host[chain]) {
-    return <a href={`${host[chain]}/tx/${value}`}>{node}</a>;
-  } else {
-    return node;
+    node = (
+      <a href={`${host[chain]}/tx/${value}`}>
+        {node}
+      </a>
+    );
   }
+  return (
+    <Typography.Text copyable={{ text: value }}>
+      {node}
+    </Typography.Text>
+  );
 }
 
 export default { Address, Transaction };
