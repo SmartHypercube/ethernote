@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Menu, notification } from 'antd';
 import { ethers } from 'ethers';
 
@@ -8,7 +8,31 @@ import contract from '../contracts/v0.1.1/Notebook';
 
 export default function NotebookMenu({ value, onChange }) {
   const { connector, account } = Ethereum.useContext();
-  const [notebooks, setNotebooks] = useState(['ethernote.eth']);
+  const [notebooks, setNotebooks] = useState([
+    'ethernote.eth',
+    'public.ethernote.eth',
+  ]);
+
+  useEffect(() => {
+    const h = decodeURIComponent(location.hash.slice(1));
+    if (h) {
+      if (!notebooks.includes(h)) {
+        setNotebooks(notebooks.concat(h));
+      }
+      onChange(h);
+    }
+  }, []);
+  useEffect(() => {
+    if (value) {
+      // We must prepend '#' in case the name itself
+      // starts with '#'.
+      // We only need to replace '%'. The browser will
+      // take care of encoding Unicode characters.
+      // To decode this:
+      // decodeURIComponent(location.hash.slice(1))
+      location.hash = '#' + value.replace('%', '%25');
+    }
+  }, [value]);
 
   const [addModal, showAddModal] = useInputModal({
     title: '打开笔记本',
