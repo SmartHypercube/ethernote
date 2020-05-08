@@ -88,7 +88,7 @@ export default function Notebook({ address }) {
   const provider = connector.provider || connector;
   const actualAddress = useAsync(async () => (
     await provider.resolveName(address)
-  ), null, [address]);
+  ), null, [address, provider]);
   const notebook = useMemo(() => (
     actualAddress && new ethers.Contract(actualAddress, contract.abi, connector)
   ), [actualAddress, connector]);
